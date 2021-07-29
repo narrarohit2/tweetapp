@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -56,7 +57,7 @@ public ResponseEntity<String> login(@RequestBody List<String> user_details){
 	}
 	else
 	{
-		response = new ResponseEntity<String>("bad cred",HttpStatus.FORBIDDEN);
+		response = new ResponseEntity<String>("Invalid user name or password",HttpStatus.FORBIDDEN);
 	}
 	}
 	else
@@ -66,4 +67,19 @@ public ResponseEntity<String> login(@RequestBody List<String> user_details){
 	return response;
 }
 
+@GetMapping(value="api/v1.0/tweets/{loginid}/forgot")
+public ResponseEntity<String> forgot_password(@PathVariable("loginid") String id){
+	ResponseEntity<String> res = null;
+	try {
+		List<Register> list_of_ids= registerRepo.findAll();
+		List<Register> filtered_list =list_of_ids.stream().filter(p ->p.getLoginid().equals(id)).collect(Collectors.toList());
+		List user_cred  = filtered_list.stream().map(li ->li.getPassword()).collect(Collectors.toList());
+		String cred = user_cred.get(0).toString();
+		res = new ResponseEntity<String>("your password is"+cred,HttpStatus.OK);
+	}
+	catch (Exception e) {
+		res = new ResponseEntity<String>("invalid loginid",HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	return res;
+}
 }
