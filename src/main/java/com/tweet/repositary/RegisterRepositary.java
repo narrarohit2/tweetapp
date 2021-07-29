@@ -1,8 +1,8 @@
-package com.example.tweet.repositary;
+package com.tweet.repositary;
 
 import java.util.List;
 import org.springframework.data.cassandra.repository.CassandraRepository;
-import com.example.tweet.model.Register;
+import com.tweet.model.Register;
 public interface RegisterRepositary extends CassandraRepository<Register, String>{
 	
 

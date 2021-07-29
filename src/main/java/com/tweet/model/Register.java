@@ -1,4 +1,4 @@
-package com.example.tweet.model;
+package com.tweet.model;
 
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;

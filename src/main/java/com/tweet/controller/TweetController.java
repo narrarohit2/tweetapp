@@ -1,10 +1,10 @@
-package com.example.tweet.controller;
+package com.tweet.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException.BadRequest;
 
-import com.example.tweet.repositary.RegisterRepositary;
-import com.example.tweet.model.Register;
+import com.tweet.repositary.RegisterRepositary;
+import com.tweet.model.Register;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -78,8 +78,9 @@ public ResponseEntity<String> forgot_password(@PathVariable("loginid") String id
 		res = new ResponseEntity<String>("your password is"+cred,HttpStatus.OK);
 	}
 	catch (Exception e) {
-		res = new ResponseEntity<String>("invalid loginid",HttpStatus.INTERNAL_SERVER_ERROR);
+		res = new ResponseEntity<String>("Invalid loginid",HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	return res;
 }
+
 }
