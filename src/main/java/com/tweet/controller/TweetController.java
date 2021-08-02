@@ -183,8 +183,8 @@ public ResponseEntity<String> like_tweet(@PathVariable("username") String login_
 			{
 				list_of_like_data = user_tweet_data_to_like.getLikes_of_tweet();
 				list_of_like_data.add("liked by"+login_id);
-				user_tweet_data_to_like.setLikes_of_tweet(list_of_like_data);
 			}
+			
 			tweetsRepo.save(user_tweet_data_to_like);
 			like_response = new ResponseEntity<String>("liked the tweet",HttpStatus.OK);
 		}
@@ -196,9 +196,25 @@ public ResponseEntity<String> like_tweet(@PathVariable("username") String login_
 		like_response  = new ResponseEntity<String>("please enter valid input",HttpStatus.BAD_REQUEST);
 	}
 	catch (Exception e) {
-		e.printStackTrace();
 		like_response = new ResponseEntity<String>("Error while liking the tweet",HttpStatus.INTERNAL_SERVER_ERROR);
 }
 	return like_response;
 }
+
+@GetMapping(value="/api/v1.0/tweets/all")
+public ResponseEntity<List<String>> get_all_tweets(){
+	ResponseEntity<List<String>> get_res= null;
+	try {
+		List<Tweets> list_of_tweets= tweetsRepo.findAll();
+		List<String> tweets_list = list_of_tweets.stream().map(s -> s.getDescription()).collect(Collectors.toList());
+		get_res = new ResponseEntity<List<String>>(tweets_list,HttpStatus.OK);
+		
+	}
+	catch(Exception ex) {
+		get_res = new ResponseEntity<List<String>>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	return get_res;
+}
+
+
 }
