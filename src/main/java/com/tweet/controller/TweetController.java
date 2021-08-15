@@ -216,5 +216,45 @@ public ResponseEntity<List<String>> get_all_tweets(){
 	return get_res;
 }
 
+@PostMapping(value="/api/v1.0/tweets/{username}/reply/{id}")
+public ResponseEntity<String> comment_to_tweet(@PathVariable("username") String login_id,@PathVariable("id") UUID id_of_tweet,@RequestBody String comment){
+	ResponseEntity<String> comment_response = null;
+	try {
+		Optional<Tweets> comment_data_of_id = tweetsRepo.findById(id_of_tweet);
+		if(comment_data_of_id.isPresent()) {
+			Tweets user_tweet_data_to_comment = comment_data_of_id.get();
+			List<String> list_of_comment_data = null;
+			if(user_tweet_data_to_comment.getComments_to_tweet() == null)
+			{
+				List<String> list_of_empty_data_comment = new ArrayList<String>();
+				System.out.print(comment);
+				list_of_empty_data_comment.add(comment);	
+				user_tweet_data_to_comment.setComments_to_tweet(list_of_empty_data_comment);
+			}
+			else
+			{
+				list_of_comment_data = user_tweet_data_to_comment.getComments_to_tweet();
+				list_of_comment_data.add(comment);
+			}
+			
+			tweetsRepo.save(user_tweet_data_to_comment);
+			comment_response = new ResponseEntity<String>("commented the tweet",HttpStatus.OK);
+		}
+		else {
+			comment_response = new ResponseEntity<String>("no tweet was present to comment",HttpStatus.OK);
+		}
+	}
+	catch (BadRequest ex) {
+	   comment_response  = new ResponseEntity<String>("please enter valid input",HttpStatus.BAD_REQUEST);
+	}
+	catch (Exception e) {
+		e.printStackTrace();
+		comment_response = new ResponseEntity<String>("Error while liking the tweet",HttpStatus.INTERNAL_SERVER_ERROR);
+}
+	return comment_response;
+}
+
+
+
 
 }
